@@ -1,0 +1,32 @@
+$color-light: #CBD9D6;
+$color-dark: #8DA593;
+
+$color-lighter: rgba(255,255,255,.2);
+$color-darker: rgba(0,0,0,.2);
+
+$max-width: 80rem;
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+*,
+*::after,
+*::before {
+	box-sizing: inherit;
+}
+
+html {
+	box-sizing: border-box;
+	font-size: 62.5%;
+}
+
+body {
+	font-family: "Open Sans", sans-serif;
+	font-weight: 400;
+	font-size: 1.6rem;
+	min-height: 100vh;
+	background-color: $color-light;
+	color: $color-dark;
+}
