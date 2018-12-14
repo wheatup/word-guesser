@@ -20,6 +20,9 @@ $(document).ready(async () => {
 	$('.words').on('click', 'span', onClickWord);
 	$('#add_words').on('click', onClickAddWords);
 	$('#clear_words').on('click', onClickClearWords);
+	$('.how-to-use').on('click', ()=>{
+		swal('How To Use', 'Type characters in the search box, type " _ . ? * " as wildcards', 'info');
+	});
 	$('.inputs--clear').on('click', () => {
 		$input.html('');
 		onTextChange();

@@ -22,12 +22,10 @@ $border-light: solid 2px lighten($color-light, 10%);
 
 html {
 	box-sizing: border-box;
-	font-size: 62.5%;
 }
 
 body {
 	font-family: 'Acme', sans-serif;
-	font-size: 2rem;
 	min-height: 100vh;
 	background-color: $color-light;
 	color: $color-dark;
@@ -47,4 +45,8 @@ footer {
 	background-color: rgba($color-dark, .4);
 	color: #fff;
 
+}
+
+.swal2-container {
+	font-size: 2rem;
 }

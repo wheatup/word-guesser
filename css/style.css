@@ -9,12 +9,10 @@
   font: inherit; }
 
 html {
-  box-sizing: border-box;
-  font-size: 62.5%; }
+  box-sizing: border-box; }
 
 body {
   font-family: 'Acme', sans-serif;
-  font-size: 2rem;
   min-height: 100vh;
   background-color: #CBD9D6;
   color: #8DA593;
@@ -33,6 +31,9 @@ footer {
   background-color: rgba(141, 165, 147, 0.4);
   color: #fff; }
 
+.swal2-container {
+  font-size: 2rem; }
+
 .btn {
   padding: .5rem 1rem;
   border: solid 2px rgba(141, 165, 147, 0.5);
@@ -40,7 +41,6 @@ footer {
   cursor: pointer;
   color: #fff;
   background-color: #8DA593;
-  font-size: 2rem;
   transition: all .2s; }
   .btn:focus {
     outline: none; }
@@ -54,8 +54,7 @@ footer {
   background-color: rgba(255, 255, 255, 0.2);
   border: solid 2px rgba(141, 165, 147, 0.5);
   border-radius: .5rem;
-  color: #8DA593;
-  font-size: 2rem; }
+  color: #8DA593; }
   .ipt:focus {
     outline: none; }
 
@@ -66,14 +65,27 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem; }
+  padding: 1rem;
+  position: relative; }
 
 .title {
-  font-size: 7rem;
+  font-size: 4rem;
   font-weight: bold;
   text-shadow: 0px 3px 0px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
   white-space: nowrap; }
+
+.version {
+  position: absolute;
+  transform: translate(12rem, 4rem); }
+
+.how-to-use {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer; }
+  .how-to-use:hover {
+    color: white; }
 
 .inputs {
   margin-bottom: 1rem;
@@ -87,10 +99,10 @@ footer {
     font-family: 'Space Mono', monospace;
     text-align: center;
     color: #8DA593;
-    font-size: 5rem;
+    font-size: 2rem;
     letter-spacing: 1rem;
     display: block;
-    line-height: 6rem;
+    line-height: 3rem;
     font-weight: bold;
     width: 100%;
     white-space: nowrap;
@@ -118,9 +130,9 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.5rem;
-    width: 2.5rem;
-    height: 2.5rem;
+    font-size: 1.5rem;
+    width: 2rem;
+    height: 2rem;
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -153,7 +165,7 @@ footer {
     padding: .5rem 1rem;
     margin: .5rem;
     display: block;
-    font-size: 2rem;
+    font-size: 1.5rem;
     box-shadow: 0px 4px 0px rgba(141, 165, 147, 0.25);
     border-radius: .5rem;
     border: solid 2px #CBD9D6;
