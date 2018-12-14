@@ -20,7 +20,7 @@ $(document).ready(async () => {
 	$('.words').on('click', 'span', onClickWord);
 	$('#add_words').on('click', onClickAddWords);
 	$('#clear_words').on('click', onClickClearWords);
-	$('.how-to-use').on('click', ()=>{
+	$('.how-to-use').on('click', () => {
 		swal('How To Use', 'Type characters in the search box, type " _ . ? * " as wildcards', 'info');
 	});
 	$('.inputs--clear').on('click', () => {
@@ -94,7 +94,7 @@ function onFoundWords(wordSet) {
 
 		outer: for (let words of wordSet) {
 			for (let word of words) {
-				if(searchedWords.indexOf(word < 0)){
+				if (searchedWords.indexOf(word < 0)) {
 					searchedWords.push(word);
 				}
 				count++;
@@ -109,7 +109,7 @@ function onFoundWords(wordSet) {
 	}, 500);
 }
 
-function showSearchedWords(){
+function showSearchedWords() {
 	searchedWords.forEach(word => $wordsArea.append(`<span>${word}</span>`));
 }
 
@@ -182,14 +182,29 @@ function onClickAddWords() {
 }
 
 function onClickClearWords() {
-	if(confirm('Are you sure?')){
-		const d = dictionaries.find(d => d.name === 'User Dictionary');
-		if (d) {
-			d.dictionary = [];
-			refreshDictionary();
-			saveUserDictionary();
+	Swal({
+		title: 'Are you sure?',
+		text: "You won't be able to revert this!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, remove all the words.'
+	}).then((result) => {
+		if (result.value) {
+			const d = dictionaries.find(d => d.name === 'User Dictionary');
+			if (d) {
+				d.dictionary = [];
+				refreshDictionary();
+				saveUserDictionary();
+			}
+			Swal(
+				'Deleted!',
+				'Your custom dictionary has been cleard.',
+				'success'
+			)
 		}
-	}
+	})
 }
 
 function saveUserDictionary() {
