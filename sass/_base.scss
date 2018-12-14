@@ -5,6 +5,8 @@ $color-lighter: rgba(255,255,255,.2);
 $color-darker: rgba(0,0,0,.2);
 
 $max-width: 80rem;
+$border: solid 2px rgba($color-dark, .5);
+$border-light: solid 2px lighten($color-light, 10%);
 
 * {
 	margin: 0;
@@ -15,6 +17,7 @@ $max-width: 80rem;
 *::after,
 *::before {
 	box-sizing: inherit;
+	font: inherit;
 }
 
 html {
@@ -23,10 +26,25 @@ html {
 }
 
 body {
-	font-family: "Open Sans", sans-serif;
-	font-weight: 400;
-	font-size: 1.6rem;
+	font-family: 'Acme', sans-serif;
+	font-size: 2rem;
 	min-height: 100vh;
 	background-color: $color-light;
 	color: $color-dark;
+	min-height: 100vh;
+	padding-bottom: 5rem;
+	position: relative;
+}
+
+footer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	bottom: 0;
+	height: 5rem;
+	width: 100%;
+	background-color: rgba($color-dark, .4);
+	color: #fff;
+
 }

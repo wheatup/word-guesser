@@ -1,6 +1,7 @@
-let $input, $pseudo, $wordsArea, $dictionaries, $tips;
+let $input, $pseudo, $wordsArea, $dictionaries, $tips, $userInput;
 let timer;
 let dictionaries = [];
+let searchedWords = [];
 const maxCount = 1000;
 
 String.prototype.replaceAll = function (search, replacement) {
@@ -14,30 +15,40 @@ $(document).ready(async () => {
 	$pseudo = $('#pseudo');
 	$dictionaries = $('.dictionaries');
 	$tips = $('.tips');
-	$('.dictionaries').on('change', '.dictionary-option', onDictionaryChange);
+	$userInput = $('#user_input');
+	$('.dictionaries').on('change', '.dictionary--option', onDictionaryChange);
+	$('.words').on('click', 'span', onClickWord);
+	$('#add_words').on('click', onClickAddWords);
+	$('#clear_words').on('click', onClickClearWords);
+	$('.inputs--clear').on('click', () => {
+		$input.html('');
+		onTextChange();
+	});
+	$input.attr('contenteditable', true);
+	$input.on('input', onTextChange);
 
 	let dictionary = await loadDictionary();
+	setUserDictionary();
 	createDictionaryOption(dictionary, 'Default Dictionary', true);
 
-	$input.attr('contenteditable', true);
 	onReceiveInput();
-	$input.on('input', onTextChange);
 });
 
-function onTextChange(){
+function onTextChange() {
 	let text = $input.html();
 	onReceiveInput(text);
 }
 
 function onReceiveInput(text) {
 	if (!text) {
-		$pseudo.html('Enter Text');
+		$pseudo.html('Search');
 		$pseudo.addClass('empty');
 		onFoundWords();
 		return;
 	} else {
 		$pseudo.removeClass('empty');
 	}
+	$tips.html('Searching...');
 
 	let displayString = text;
 	displayString = displayString.replace(/[\.\*\?]/g, '_');
@@ -62,12 +73,12 @@ function onReceiveInput(text) {
 
 function onFoundWords(wordSet) {
 	$wordsArea.html('');
-	$tips.html('');
+	searchedWords = [];
 	if (timer) {
 		clearTimeout(timer);
 	}
 	if (!wordSet || wordSet.length === 0) {
-		$tips.html(`<span>Displaying 0 of 0 results</span>`);
+		$tips.html(`Displaying 0 of 0 results`);
 		return;
 	}
 
@@ -80,20 +91,28 @@ function onFoundWords(wordSet) {
 
 		outer: for (let words of wordSet) {
 			for (let word of words) {
-				$wordsArea.append(`<span>${word}</span>`)
+				if(searchedWords.indexOf(word < 0)){
+					searchedWords.push(word);
+				}
 				count++;
 				if (count >= maxCount) {
 					break outer;
 				}
 			}
 		}
-		$tips.html(`<span>Displaying ${count} of ${totalCount} results</span>`);
+
+		showSearchedWords();
+		$tips.html(`Displaying ${count.toLocaleString('en-US')} of ${totalCount.toLocaleString('en-US')} results`);
 	}, 500);
+}
+
+function showSearchedWords(){
+	searchedWords.forEach(word => $wordsArea.append(`<span>${word}</span>`));
 }
 
 function loadDictionary() {
 	return new Promise((resolve, reject) => {
-		$.getJSON('/data/dictionary.json').then(json => {
+		$.getJSON('./data/dictionary.json').then(json => {
 			resolve(json);
 		}).catch(ex => {
 			reject(ex);
@@ -108,16 +127,72 @@ function onDictionaryChange(e) {
 	onTextChange();
 }
 
-function createDictionaryOption(dict, name, selected) {
-	let d = { selected, dictionary: dict, name };
+function setUserDictionary() {
+	let words = [];
+	const udStr = localStorage.getItem('user_dictionary');
+	if (udStr) {
+		const uWords = udStr.split(',');
+		uWords.map(w => words.push(w.trim()));
+	}
+	createDictionaryOption(words, 'User Dictionary');
+}
+
+function onClickWord(e) {
+	const { target } = e;
+}
+
+function createDictionaryOption(words, name, selected = true) {
+	let d = { selected, dictionary: words, name };
 	dictionaries.push(d);
+	refreshDictionary();
+}
+
+function refreshDictionary() {
 	$dictionaries.html('');
 	dictionaries.forEach(d => {
 		$dictionaries.append(`
 			<div class="dictionary">
-				<input data-dictionary="${name}" id="dictionary_${name}" class="dictionary-option" type="checkbox" ${d.selected && 'checked="checked"'} />
-				<label for="dictionary_${name}" data-count="${dict.length}">${name}</label>
+				<input class="dictionary--option" data-dictionary="${d.name}" id="dictionary_${d.name}" type="checkbox" ${d.selected && 'checked="checked"'} />
+				<label class="dictionary--label" for="dictionary_${d.name}" data-count="${d.dictionary.length.toLocaleString('en-US')}">${d.name}</label>
 			</div>
 		`);
 	});
+}
+
+function onClickAddWords() {
+	const text = $userInput.val();
+	if (text) {
+		const rawList = text.split(',');
+		const d = dictionaries.find(d => d.name === 'User Dictionary');
+		if (d) {
+			rawList.forEach(word => {
+				let w = word.trim();
+				if (d.dictionary.indexOf(w) < 0) {
+					d.dictionary.push(w);
+				}
+			});
+			refreshDictionary();
+			saveUserDictionary();
+			$userInput.val('');
+		}
+	}
+}
+
+function onClickClearWords() {
+	if(confirm('Are you sure?')){
+		const d = dictionaries.find(d => d.name === 'User Dictionary');
+		if (d) {
+			d.dictionary = [];
+			refreshDictionary();
+			saveUserDictionary();
+		}
+	}
+}
+
+function saveUserDictionary() {
+	const d = dictionaries.find(d => d.name === 'User Dictionary');
+	if (d) {
+		const text = d.dictionary.join(',');
+		localStorage.setItem('user_dictionary', text);
+	}
 }

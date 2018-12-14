@@ -5,24 +5,44 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	padding: 1rem;
+}
+
+.title {
+	font-size: 7rem;
+	font-weight: bold;
+	text-shadow: 0px 3px 0px rgba(0, 0, 0, .1);
+	margin-bottom: 1rem;
+	white-space: nowrap;
 }
 
 .inputs {
-	margin-top: 2rem;
-	padding: .5rem 1rem;
+	margin-bottom: 1rem;
 	border-radius: 1rem;
+	border: $border;
 	background-color: $color-lighter;
+	position: relative;
+	width: 100%;
 
-	
-	
-	&--input, &--pseudo {
+	&--input,
+	&--pseudo {
+		padding: 1rem;
+		font-family: 'Space Mono', monospace;
 		text-align: center;
-		color: #fff;
+		color: $color-dark;
 		font-size: 5rem;
 		letter-spacing: 1rem;
-		font-weight: 700;
-		min-width: 50rem;
 		display: block;
+		line-height: 6rem;
+		font-weight: bold;
+		width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+
+		@media screen and (max-width: 50rem) {
+			width: 100%;
+			min-width: initial;
+		}
 
 		&:focus {
 			outline: none;
@@ -33,9 +53,9 @@
 		}
 	}
 
-	&--pseudo{
+	&--pseudo {
 		&.empty {
-			color: rgba(0,0,0,.2);
+			color: rgba($color-dark, .25);
 		}
 	}
 
@@ -44,7 +64,38 @@
 		transform: translateY(-100%);
 		color: transparent;
 
-		caret-color: rgba(0,0,0,.2);
+		caret-color: rgba(0, 0, 0, .2);
+
+		&::selection {
+			background: $color-dark;
+		}
+	}
+
+	&--clear {
+		border-radius: 5rem;
+		border: solid 2px currentColor;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 2.5rem;
+		width: 2.5rem;
+		height: 2.5rem;
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		cursor: pointer;
+		transition: color .2s, background-color .2s;
+
+		&:hover {
+			color: #fff;
+			background-color: $color-dark;
+		}
+
+		&::after {
+			content: "\00d7";
+			display: block;
+			margin-top: -2px;
+		}
 	}
 }
 
@@ -53,20 +104,103 @@
 	background-color: $color-lighter;
 	padding: 1rem 1rem;
 	color: #fff;
-	margin-top: 2rem;
+	margin-bottom: 1rem;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
+	align-items: flex-start;
 	border-radius: 1rem;
-	min-width: 10rem;
-	min-height: 5rem;
+	border: $border;
+	width: 100%;
+	min-height: 20rem;
 
 	&>* {
 		background-color: $color-dark;
 		padding: .5rem 1rem;
-		margin: .5rem 1rem;
+		margin: .5rem;
 		display: block;
 		font-size: 2rem;
-		box-shadow: 0px .5rem 0px rgba($color-dark, .5);
+		box-shadow: 0px 4px 0px rgba($color-dark, .25);
+		border-radius: .5rem;
+		border: solid 2px $color-light;
+		cursor: pointer;
+		transition: all .2s;
+
+		&:hover {
+			color: $color-dark;
+			background-color: #fff;
+			border: $border;
+		}
 	}
+}
+
+.dictionaries {
+	margin-bottom: 1rem;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+
+	.dictionary {
+		margin: 0 .5rem;
+
+		&--label {
+			display: inline-block;
+			background-color: rgba($color-dark, .1);
+			color: rgba($color-dark, .75);
+			padding: .5rem 1rem;
+			border-radius: .5rem;
+			border: $border;
+			transition: all .2s;
+			transform: translateY(-2px);
+			cursor: pointer;
+			box-shadow: 0px 4px 0px rgba(0, 0, 0, .05);
+
+			&::after {
+				content: " ("attr(data-count) " words)";
+			}
+
+			&:hover {
+				background-color: rgba($color-dark, .2);
+				color: $color-dark;
+			}
+		}
+
+		&--option {
+			display: none;
+		}
+
+		&--option:checked+.dictionary--label {
+			background-color: $color-dark;
+			color: #fff;
+			box-shadow: 0px 2px 0px rgba(0, 0, 0, .1);
+			transform: translateY(0px);
+		}
+	}
+}
+
+.user-dictionary {
+	margin-bottom: 1rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	&>* {
+		flex: 1 1 auto;
+		&:not(:first-child){
+			margin-left: 1rem;
+		}
+	}
+
+	.btn {
+		flex: 0 1 auto;
+	}
+
+	.ipt {
+		text-align: center;
+	}
+}
+
+.tips {
+	margin-bottom: 1rem;
 }
