@@ -21,7 +21,10 @@ $(document).ready(async () => {
 	$('#add_words').on('click', onClickAddWords);
 	$('#clear_words').on('click', onClickClearWords);
 	$('.how-to-use').on('click', () => {
-		swal('How To Use', 'Type characters in the search box, type " _ . ? * " as wildcards', 'info');
+		swal('How To Use', `
+			Type letters in the search box, type <span style="color: red;">_</span> <span style="color: red;">.</span> <span style="color: red;">?</span> or <span style="color: red;">*</span> as wildcards to search words. 
+			<br><br>You can add custom word by typing word in the box below the search box, then click "Add words". 
+			<br><br>For adding multiple custom words, use comma to separate them.`, 'info');
 	});
 	$('.inputs--clear').on('click', () => {
 		$input.html('');
@@ -168,15 +171,28 @@ function onClickAddWords() {
 		const rawList = text.split(',');
 		const d = dictionaries.find(d => d.name === 'User Dictionary');
 		if (d) {
+			const foundWords = [];
 			rawList.forEach(word => {
 				let w = word.trim();
-				if (d.dictionary.indexOf(w) < 0) {
+				let found = false;
+				for(let wordInDictionary of d.dictionary){
+					if(wordInDictionary.toUpperCase() === w.toUpperCase()){
+						found = true;
+						break;
+					}
+				}
+				if(!found){
 					d.dictionary.push(w);
+				}else{
+					foundWords.push(w);
 				}
 			});
 			refreshDictionary();
 			saveUserDictionary();
 			$userInput.val('');
+			if(foundWords.length > 0){
+				swal('Already Exist', `Words "${foundWords.join(", ")}" ${foundWords.length > 1 ? "are" : "is"} already in the dictionary`, 'warning');
+			}
 		}
 	}
 }
@@ -184,7 +200,7 @@ function onClickAddWords() {
 function onClickClearWords() {
 	Swal({
 		title: 'Are you sure?',
-		text: "You won't be able to revert this!",
+		text: "You are about to clear the user dictionary.",
 		type: 'warning',
 		showCancelButton: true,
 		confirmButtonColor: '#3085d6',
